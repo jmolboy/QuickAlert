@@ -69,6 +69,9 @@ class QuickAlert {
     /// Header Background Color for dialog
     Color headerBackgroundColor = Colors.white,
 
+    /// height for the header
+    double? headerHeight,
+
     /// Header of the dialog
     Widget? header,
 
@@ -129,6 +132,7 @@ class QuickAlert {
       cancelBtnTextStyle: cancelBtnTextStyle,
       backgroundColor: backgroundColor,
       headerBackgroundColor: headerBackgroundColor,
+      headerHeight: headerHeight,
       header: header,
       titleColor: titleColor,
       textColor: textColor,

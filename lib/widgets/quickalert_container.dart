@@ -94,7 +94,7 @@ class QuickAlertContainer extends StatelessWidget {
     }
     return Container(
       width: double.infinity,
-      height: 150,
+      height: options.headerHeight ?? 150,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: options.headerBackgroundColor,
@@ -102,11 +102,16 @@ class QuickAlertContainer extends StatelessWidget {
       child: Image.asset(
         anim ?? "",
         fit: BoxFit.cover,
+        width: double.infinity,
+        height: options.headerHeight,
       ),
     );
   }
 
   Widget buildTitle(context) {
+    if (options.title == null) {
+      return Container();
+    }
     final title = options.title ?? whatTitle();
     return Visibility(
       visible: title != null,

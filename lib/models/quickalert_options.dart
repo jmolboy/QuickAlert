@@ -60,6 +60,9 @@ class QuickAlertOptions {
   /// Header Backgroung Color for dialog
   Color? headerBackgroundColor;
 
+  /// height for the header
+  double? headerHeight;
+
   /// Header Widget
   Widget? header;
 
@@ -142,6 +145,9 @@ class QuickAlertOptions {
 
     /// Header Backgroung Color for dialog
     this.headerBackgroundColor,
+
+    /// height for the header
+    this.headerHeight,
 
     ///Header of the dialog
     this.header,
