@@ -48,6 +48,9 @@ class QuickAlertOptions {
   /// TextStyle for confirm button
   TextStyle? confirmBtnTextStyle;
 
+  /// Border Radius of confirm button
+  double? confirmBtnRadius;
+
   /// TextStyle for cancel button
   TextStyle? cancelBtnTextStyle;
 
@@ -56,6 +59,9 @@ class QuickAlertOptions {
 
   /// Header Backgroung Color for dialog
   Color? headerBackgroundColor;
+
+  /// Header Widget
+  Widget? header;
 
   /// Color of title
   Color? titleColor;
@@ -125,6 +131,9 @@ class QuickAlertOptions {
     /// TextStyle for confirm button
     this.confirmBtnTextStyle,
 
+    /// Border Radius of confirm button
+    this.confirmBtnRadius,
+
     /// TextStyle for cancel button
     this.cancelBtnTextStyle,
 
@@ -133,6 +142,9 @@ class QuickAlertOptions {
 
     /// Header Backgroung Color for dialog
     this.headerBackgroundColor,
+
+    ///Header of the dialog
+    this.header,
 
     /// Color of title
     this.titleColor,

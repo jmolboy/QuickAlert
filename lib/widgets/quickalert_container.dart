@@ -54,6 +54,16 @@ class QuickAlertContainer extends StatelessWidget {
   }
 
   Widget buildHeader(context) {
+    if (options.header != null) {
+      return ConstrainedBox(
+        constraints: const BoxConstraints(
+          minHeight: 0.0,
+          maxHeight: double.infinity,
+        ),
+        child: options.header,
+      );
+    }
+
     String? anim = AppAnim.success;
     switch (options.type) {
       case QuickAlertType.success:

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quickalert/models/quickalert_animtype.dart';
@@ -56,6 +57,9 @@ class QuickAlert {
     /// TextStyle for confirm button
     TextStyle? confirmBtnTextStyle,
 
+    /// Border Radius of confirm button
+    double? confirmBtnRadius,
+
     /// TextStyle for cancel button
     TextStyle? cancelBtnTextStyle,
 
@@ -64,6 +68,9 @@ class QuickAlert {
 
     /// Header Background Color for dialog
     Color headerBackgroundColor = Colors.white,
+
+    /// Header of the dialog
+    Widget? header,
 
     /// Color of title
     Color titleColor = Colors.black,
@@ -115,12 +122,14 @@ class QuickAlert {
       onConfirmBtnTap: onConfirmBtnTap,
       onCancelBtnTap: onCancelBtnTap,
       confirmBtnText: confirmBtnText,
+      confirmBtnRadius: confirmBtnRadius,
       cancelBtnText: cancelBtnText,
       confirmBtnColor: confirmBtnColor,
       confirmBtnTextStyle: confirmBtnTextStyle,
       cancelBtnTextStyle: cancelBtnTextStyle,
       backgroundColor: backgroundColor,
       headerBackgroundColor: headerBackgroundColor,
+      header: header,
       titleColor: titleColor,
       textColor: textColor,
       showCancelBtn: showCancelBtn,
@@ -130,18 +139,16 @@ class QuickAlert {
       width: width,
     );
 
-    Widget child = WillPopScope(
-      onWillPop: () async {
+    Widget child = PopScope(
+      onPopInvokedWithResult: (didPop, result) async {
         options.timer?.cancel();
         if (options.type == QuickAlertType.loading &&
             !disableBackBtn &&
             showCancelBtn) {
           if (options.onCancelBtnTap != null) {
             options.onCancelBtnTap!();
-            return false;
           }
         }
-        return !disableBackBtn;
       },
       child: AlertDialog(
         contentPadding: EdgeInsets.zero,
@@ -155,11 +162,11 @@ class QuickAlert {
     );
 
     if (options.type != QuickAlertType.loading) {
-      child = RawKeyboardListener(
+      child = KeyboardListener(
         focusNode: FocusNode(),
         autofocus: true,
-        onKey: (event) {
-          if (event is RawKeyUpEvent &&
+        onKeyEvent: (event) {
+          if (event is KeyUpEvent &&
               event.logicalKey == LogicalKeyboardKey.enter) {
             options.timer?.cancel();
             options.onConfirmBtnTap != null
