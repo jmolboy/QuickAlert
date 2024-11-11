@@ -108,21 +108,27 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.white,
           ),
           titleOptions: AlertTitleOptions(
-              alignment: TextAlign.right, color: Colors.white),
+              title: "title", alignment: TextAlign.right, color: Colors.white),
           headerOptions: AlertHeaderOptions(
             backgroundColor: Colors.grey,
           ),
           buttonOptions: AlertButtonOptions(
+            direction: Axis.horizontal,
             confirmButton: AlertButton(
               type: AlertButtonType.confirm,
               text: "Yes",
+              height: 40,
+              width: 100,
               color: Colors.white,
               style: const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
+              backgroundColor: Colors.yellow,
             ),
             cancelButton: AlertButton(
+                height: 40,
+                width: 200,
                 type: AlertButtonType.cancel,
                 text: "No",
                 onTap: () {
@@ -288,6 +294,48 @@ class _MyHomePageState extends State<MyHomePage> {
       leadingImage: 'assets/confirm.gif',
     );
 
+    final confirmButtonsVertical = buildButton(
+      onTap: () {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.confirm,
+          contentOptions: AlertContentOptions(
+            text: 'Do you want to logout',
+            alignment: TextAlign.right,
+            color: Colors.white,
+          ),
+          titleOptions: AlertTitleOptions(
+              alignment: TextAlign.right, color: Colors.white),
+          headerOptions: AlertHeaderOptions(
+            backgroundColor: Colors.grey,
+          ),
+          buttonOptions: AlertButtonOptions(
+            direction: Axis.vertical,
+            confirmButton: AlertButton(
+              type: AlertButtonType.confirm,
+              text: "Yes",
+              color: Colors.white,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            cancelButton: AlertButton(
+                type: AlertButtonType.cancel,
+                text: "No",
+                onTap: () {
+                  Navigator.pop(context);
+                }),
+          ),
+          backgroundColor: Colors.black,
+          barrierColor: Colors.white,
+        );
+      },
+      title: 'Confirm buttons vertical',
+      text: 'Do you want to logout',
+      leadingImage: 'assets/confirm.gif',
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -317,6 +365,8 @@ class _MyHomePageState extends State<MyHomePage> {
           customAlert,
           const SizedBox(height: 20),
           customHeaderConfirm,
+          const SizedBox(height: 20),
+          confirmButtonsVertical,
           const SizedBox(height: 20),
         ],
       ),

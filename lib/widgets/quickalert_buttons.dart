@@ -20,8 +20,9 @@ class QuickAlertButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           cancelBtn(context),
           alertType != QuickAlertType.loading
@@ -38,80 +39,65 @@ class QuickAlertButtons extends StatelessWidget {
     }
 
     final confirmButton = options.confirmButton!;
-    var showCancelBtn = options.cancelButton != null;
-    if (alertType == QuickAlertType.confirm) {
-      showCancelBtn = true;
-    }
-
-    final btnText = Text(
-      options.confirmButton?.text ?? '',
-      style: defaultTextStyle(confirmButton),
-    );
-
-    final okayBtn = MaterialButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(confirmButton.radius ?? 15.0),
-      ),
-      color: confirmButton.color ?? Theme.of(context!).primaryColor,
-      onPressed: () {
-        timerEnd();
-        if (confirmButton.onTap != null) {
-          confirmButton.onTap!();
-        } else {
-          Navigator.pop(context);
-        }
-      },
+    return Container(
       height: confirmButton.height,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(7.5),
-          child: btnText,
+      width: confirmButton.width,
+      decoration: BoxDecoration(
+          color:
+              confirmButton.backgroundColor ?? Theme.of(context!).primaryColor,
+          borderRadius: BorderRadius.circular(confirmButton.radius ?? 15)),
+      child: TextButton(
+        onPressed: () {
+          timerEnd();
+          if (confirmButton.onTap != null) {
+            confirmButton.onTap!();
+          } else {
+            Navigator.pop(context);
+          }
+        },
+        child: Text(
+          options.confirmButton?.text ?? '',
+          style: defaultTextStyle(confirmButton),
         ),
       ),
     );
-    if (showCancelBtn) {
-      return Expanded(child: okayBtn);
-    } else {
-      return okayBtn;
-    }
   }
 
   Widget cancelBtn(context) {
     if (options.cancelButton == null) {
-      return const SizedBox();
+      return Container();
     }
 
     final cancelButton = options.cancelButton!;
-    final btnText = Text(
-      cancelButton.text ?? '',
-      style: defaultTextStyle(cancelButton),
-    );
-
-    return Expanded(
-        child: GestureDetector(
-      onTap: () {
-        timerEnd();
-        if (cancelButton.onTap != null) {
-          cancelButton.onTap!();
-        } else {
-          Navigator.pop(context);
-        }
-      },
-      child: Center(
-        child: btnText,
+    return Container(
+      height: cancelButton.height,
+      width: cancelButton.width,
+      decoration: BoxDecoration(
+          color: cancelButton.backgroundColor,
+          borderRadius: BorderRadius.circular(cancelButton.radius ?? 15)),
+      child: TextButton(
+        onPressed: () {
+          timerEnd();
+          if (cancelButton.onTap != null) {
+            cancelButton.onTap!();
+          } else {
+            Navigator.pop(context);
+          }
+        },
+        child: Text(
+          cancelButton.text ?? '',
+          style: defaultTextStyle(cancelButton),
+        ),
       ),
-    ));
+    );
   }
 
   TextStyle defaultTextStyle(AlertButton alertButton) {
     if (alertButton.style != null) {
       return alertButton.style!;
     }
-
     return TextStyle(
-      color: alertButton.type == AlertButtonType.confirm
-          ? Colors.white
-          : Colors.grey,
+      color: alertButton.backgroundColor ?? Colors.grey,
       fontWeight: FontWeight.w600,
       fontSize: 18.0,
     );

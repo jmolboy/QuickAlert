@@ -84,11 +84,15 @@ class AlertButton {
 
   double? radius;
 
+  double? width;
+
   double? height;
 
   Widget? button;
 
   Color? color;
+
+  Color? backgroundColor;
 
   AlertButton({
     required this.type,
@@ -96,17 +100,21 @@ class AlertButton {
     this.text,
     this.style,
     this.radius,
+    this.width,
     this.height,
     this.button,
     this.color,
+    this.backgroundColor,
   });
 }
 
 class AlertButtonOptions {
   AlertButton? confirmButton;
   AlertButton? cancelButton;
+  Axis? direction;
 
   AlertButtonOptions({
+    this.direction,
     this.confirmButton,
     this.cancelButton,
   });

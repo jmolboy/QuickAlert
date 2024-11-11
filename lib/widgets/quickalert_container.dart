@@ -23,9 +23,8 @@ class QuickAlertContainer extends StatelessWidget {
     final content = Container(
       padding: const EdgeInsets.all(20.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          title,
           const SizedBox(
             height: 5.0,
           ),
@@ -34,7 +33,10 @@ class QuickAlertContainer extends StatelessWidget {
           const SizedBox(
             height: 10.0,
           ),
-          buttons
+          buttons,
+          const SizedBox(
+            height: 10.0,
+          ),
         ],
       ),
     );
@@ -44,11 +46,11 @@ class QuickAlertContainer extends StatelessWidget {
         color: options.backgroundColor,
         borderRadius: BorderRadius.circular(options.borderRadius!),
       ),
-      clipBehavior: Clip.antiAlias,
+      // clipBehavior: Clip.antiAlias,
       width: options.width ?? MediaQuery.of(context).size.shortestSide,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [header, content],
+        children: [header, title, content],
       ),
     );
   }
