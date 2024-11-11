@@ -71,8 +71,12 @@ class QuickAlert {
       contentOptions: contentOptions,
       buttonOptions: buttonOptions ??
           AlertButtonOptions(
-              cancelButton:
-                  AlertButton(type: AlertButtonType.cancel, text: "Cancel")),
+            cancelButton: AlertButton(
+              type: AlertButtonType.cancel,
+              text: "Cancel",
+              color: Colors.grey,
+            ),
+          ),
       type: type,
       animType: animType,
       barrierDismissible: barrierDismissible,

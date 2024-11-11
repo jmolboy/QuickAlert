@@ -106,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             text: 'Do you want to logout',
             alignment: TextAlign.right,
             color: Colors.white,
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
           ),
           titleOptions: AlertTitleOptions(
               title: "title", alignment: TextAlign.right, color: Colors.white),
@@ -262,10 +263,11 @@ class _MyHomePageState extends State<MyHomePage> {
               alignment: TextAlign.right, color: Colors.white),
           contentOptions: AlertContentOptions(
             text: 'Do you want to logout',
-            alignment: TextAlign.right,
+            alignment: TextAlign.center,
             color: Colors.white,
           ),
           buttonOptions: AlertButtonOptions(
+            direction: Axis.horizontal,
             confirmButton: AlertButton(
               type: AlertButtonType.confirm,
               text: "Yes",

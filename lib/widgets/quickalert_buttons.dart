@@ -18,17 +18,35 @@ class QuickAlertButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final buttons = [
+      alertType != QuickAlertType.loading ? okayBtn(context) : const SizedBox(),
+      cancelBtn(context),
+    ];
+
+    if (options.direction == Axis.vertical) {
+      return Container(
+        margin: const EdgeInsets.only(top: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: buttons,
+        ),
+      );
+    }
+
+    // MainAxisAlignment.spaceEvenly在只有一个元素时不居中显示
+    final showConfirmBtn =
+        alertType != QuickAlertType.loading && options.confirmButton != null;
+    final showCancelBtn = options.cancelButton != null;
+
     return Container(
       margin: const EdgeInsets.only(top: 10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: showConfirmBtn && showCancelBtn == true
+            ? MainAxisAlignment.spaceEvenly
+            : MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          cancelBtn(context),
-          alertType != QuickAlertType.loading
-              ? okayBtn(context)
-              : const SizedBox.shrink(),
-        ],
+        children: buttons,
       ),
     );
   }
@@ -65,7 +83,8 @@ class QuickAlertButtons extends StatelessWidget {
 
   Widget cancelBtn(context) {
     if (options.cancelButton == null) {
-      return Container();
+      //返回默认的按钮
+      return const SizedBox();
     }
 
     final cancelButton = options.cancelButton!;
@@ -73,7 +92,6 @@ class QuickAlertButtons extends StatelessWidget {
       height: cancelButton.height,
       width: cancelButton.width,
       decoration: BoxDecoration(
-          color: cancelButton.backgroundColor,
           borderRadius: BorderRadius.circular(cancelButton.radius ?? 15)),
       child: TextButton(
         onPressed: () {

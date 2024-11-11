@@ -11,6 +11,9 @@ class AlertHeaderOptions {
   /// Header Backgroung Color for dialog
   Color? backgroundColor;
 
+  /// default height of the header
+  double? height;
+
   AlertHeaderOptions({
     this.header,
     this.backgroundColor,
@@ -33,12 +36,16 @@ class AlertTitleOptions {
   /// Color of title
   TextStyle? style;
 
+  /// padding of the content
+  EdgeInsetsGeometry? padding;
+
   AlertTitleOptions({
     this.title,
     this.alignment,
     this.backgroundColor,
     this.style,
     this.color,
+    this.padding,
   });
 }
 

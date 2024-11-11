@@ -21,9 +21,10 @@ class QuickAlertContainer extends StatelessWidget {
     final widget = buildWidget(context);
 
     final content = Container(
-      padding: const EdgeInsets.all(20.0),
+      padding: options.contentOptions?.padding ??
+          const EdgeInsets.fromLTRB(20.0, 10, 20, 0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(
             height: 5.0,
@@ -46,7 +47,7 @@ class QuickAlertContainer extends StatelessWidget {
         color: options.backgroundColor,
         borderRadius: BorderRadius.circular(options.borderRadius!),
       ),
-      // clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAlias,
       width: options.width ?? MediaQuery.of(context).size.shortestSide,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -93,7 +94,6 @@ class QuickAlertContainer extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: 100,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: headerOption?.backgroundColor ?? Theme.of(context).primaryColor,
@@ -102,6 +102,7 @@ class QuickAlertContainer extends StatelessWidget {
         anim,
         fit: BoxFit.cover,
         width: double.infinity,
+        height: headerOption?.height ?? 100,
       ),
     );
   }
@@ -114,10 +115,14 @@ class QuickAlertContainer extends StatelessWidget {
     final title = titleOption?.title ?? whatTitle();
     return Visibility(
       visible: title != null,
-      child: Text(
-        '$title',
-        textAlign: titleOption?.alignment ?? TextAlign.center,
-        style: titleOption?.style ?? TextStyle(color: titleOption?.color),
+      child: Container(
+        padding:
+            titleOption?.padding ?? const EdgeInsets.symmetric(vertical: 10.0),
+        child: Text(
+          '$title',
+          textAlign: titleOption?.alignment ?? TextAlign.center,
+          style: titleOption?.style ?? TextStyle(color: titleOption?.color),
+        ),
       ),
     );
   }
