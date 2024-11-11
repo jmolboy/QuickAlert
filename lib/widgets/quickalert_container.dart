@@ -54,13 +54,13 @@ class QuickAlertContainer extends StatelessWidget {
   }
 
   Widget buildHeader(context) {
-    if (options.header != null) {
+    final headerOption = options.headerOptions;
+    if (headerOption?.header != null) {
       return ConstrainedBox(
         constraints: const BoxConstraints(
-          minHeight: 0.0,
-          maxHeight: double.infinity,
+          minHeight: 10.0,
         ),
-        child: options.header,
+        child: headerOption?.header,
       );
     }
 
@@ -89,80 +89,84 @@ class QuickAlertContainer extends StatelessWidget {
         break;
     }
 
-    if (options.customAsset != null) {
-      anim = options.customAsset;
-    }
     return Container(
       width: double.infinity,
-      height: options.headerHeight ?? 150,
+      height: 100,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: options.headerBackgroundColor,
+        color: headerOption?.backgroundColor ?? Theme.of(context).primaryColor,
       ),
       child: Image.asset(
-        anim ?? "",
+        anim,
         fit: BoxFit.cover,
         width: double.infinity,
-        height: options.headerHeight,
       ),
     );
   }
 
   Widget buildTitle(context) {
-    if (options.title == null) {
+    final titleOption = options.alertTitleOptions;
+    if (titleOption?.title == null) {
       return Container();
     }
-    final title = options.title ?? whatTitle();
+    final title = titleOption?.title ?? whatTitle();
     return Visibility(
       visible: title != null,
       child: Text(
         '$title',
-        textAlign: options.titleAlignment ?? TextAlign.center,
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: options.titleColor,
-                ) ??
-            TextStyle(
-              color: options.titleColor,
-            ),
+        textAlign: titleOption?.alignment ?? TextAlign.center,
+        style: titleOption?.style ?? TextStyle(color: titleOption?.color),
       ),
     );
   }
 
   Widget buildText(context) {
-    if (options.text == null && options.type != QuickAlertType.loading) {
+    final contentOptions = options.contentOptions;
+    if (contentOptions?.text == null &&
+        options.type != QuickAlertType.loading) {
       return Container();
     } else {
       String? text = '';
       if (options.type == QuickAlertType.loading) {
-        text = options.text ?? 'Loading';
+        text = contentOptions?.text ?? 'Loading';
       } else {
-        text = options.text;
+        text = contentOptions?.text;
       }
       return Text(
         text ?? '',
-        textAlign: options.textAlignment ?? TextAlign.center,
+        textAlign: contentOptions?.alignment ?? TextAlign.center,
         style: TextStyle(
-          color: options.textColor,
+          color: contentOptions?.color,
         ),
       );
     }
   }
 
   Widget? buildWidget(context) {
-    if (options.widget == null && options.type != QuickAlertType.custom) {
+    final contentOptions = options.contentOptions;
+    if (contentOptions?.content == null &&
+        options.type != QuickAlertType.custom) {
       return Container();
     } else {
       Widget widget = Container();
       if (options.type == QuickAlertType.custom) {
-        widget = options.widget ?? widget;
+        widget = contentOptions?.content ?? widget;
       }
-      return options.widget;
+      return contentOptions?.content;
     }
   }
 
   Widget buildButtons() {
     return QuickAlertButtons(
-      options: options,
+      alertType: options.type,
+      timerEnd: () {
+        options.timer?.cancel();
+      },
+      options: options.buttonOptions ??
+          AlertButtonOptions(
+            cancelButton:
+                AlertButton(type: AlertButtonType.cancel, text: "Cancel"),
+          ),
     );
   }
 

@@ -3,11 +3,17 @@ import 'package:quickalert/models/quickalert_options.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 
 class QuickAlertButtons extends StatelessWidget {
-  final QuickAlertOptions options;
+  final AlertButtonOptions options;
+
+  final QuickAlertType alertType;
+
+  final VoidCallback timerEnd;
 
   const QuickAlertButtons({
     Key? key,
     required this.options,
+    required this.alertType,
+    required this.timerEnd,
   }) : super(key: key);
 
   @override
@@ -18,7 +24,7 @@ class QuickAlertButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           cancelBtn(context),
-          options.type != QuickAlertType.loading
+          alertType != QuickAlertType.loading
               ? okayBtn(context)
               : const SizedBox.shrink(),
         ],
@@ -27,23 +33,42 @@ class QuickAlertButtons extends StatelessWidget {
   }
 
   Widget okayBtn(context) {
-    if (!options.showConfirmBtn!) {
+    if (options.confirmButton == null) {
       return const SizedBox();
     }
-    final showCancelBtn =
-        options.type == QuickAlertType.confirm ? true : options.showCancelBtn!;
 
-    final okayBtn = buildButton(
-        context: context,
-        isOkayBtn: true,
-        text: options.confirmBtnText!,
-        onTap: () {
-          options.timer?.cancel();
-          options.onConfirmBtnTap != null
-              ? options.onConfirmBtnTap!()
-              : Navigator.pop(context);
-        });
+    final confirmButton = options.confirmButton!;
+    var showCancelBtn = options.cancelButton != null;
+    if (alertType == QuickAlertType.confirm) {
+      showCancelBtn = true;
+    }
 
+    final btnText = Text(
+      options.confirmButton?.text ?? '',
+      style: defaultTextStyle(confirmButton),
+    );
+
+    final okayBtn = MaterialButton(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(confirmButton.radius ?? 15.0),
+      ),
+      color: confirmButton.color ?? Theme.of(context!).primaryColor,
+      onPressed: () {
+        timerEnd();
+        if (confirmButton.onTap != null) {
+          confirmButton.onTap!();
+        } else {
+          Navigator.pop(context);
+        }
+      },
+      height: confirmButton.height,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(7.5),
+          child: btnText,
+        ),
+      ),
+    );
     if (showCancelBtn) {
       return Expanded(child: okayBtn);
     } else {
@@ -52,73 +77,43 @@ class QuickAlertButtons extends StatelessWidget {
   }
 
   Widget cancelBtn(context) {
-    final showCancelBtn =
-        options.type == QuickAlertType.confirm ? true : options.showCancelBtn!;
-
-    final cancelBtn = buildButton(
-        context: context,
-        isOkayBtn: false,
-        text: options.cancelBtnText!,
-        onTap: () {
-          options.timer?.cancel();
-          options.onCancelBtnTap != null
-              ? options.onCancelBtnTap!()
-              : Navigator.pop(context);
-        });
-
-    if (showCancelBtn) {
-      return Expanded(child: cancelBtn);
-    } else {
+    if (options.cancelButton == null) {
       return const SizedBox();
     }
-  }
 
-  Widget buildButton({
-    BuildContext? context,
-    required bool isOkayBtn,
-    required String text,
-    VoidCallback? onTap,
-  }) {
+    final cancelButton = options.cancelButton!;
     final btnText = Text(
-      text,
-      style: defaultTextStyle(isOkayBtn),
+      cancelButton.text ?? '',
+      style: defaultTextStyle(cancelButton),
     );
 
-    final okayBtn = MaterialButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(options.confirmBtnRadius ?? 15.0),
-      ),
-      color: options.confirmBtnColor ?? Theme.of(context!).primaryColor,
-      onPressed: onTap,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(7.5),
-          child: btnText,
-        ),
-      ),
-    );
-
-    final cancelBtn = GestureDetector(
-      onTap: onTap,
+    return Expanded(
+        child: GestureDetector(
+      onTap: () {
+        timerEnd();
+        if (cancelButton.onTap != null) {
+          cancelButton.onTap!();
+        } else {
+          Navigator.pop(context);
+        }
+      },
       child: Center(
         child: btnText,
       ),
-    );
-
-    return isOkayBtn ? okayBtn : cancelBtn;
+    ));
   }
 
-  TextStyle defaultTextStyle(bool isOkayBtn) {
-    final textStyle = TextStyle(
-      color: isOkayBtn ? Colors.white : Colors.grey,
+  TextStyle defaultTextStyle(AlertButton alertButton) {
+    if (alertButton.style != null) {
+      return alertButton.style!;
+    }
+
+    return TextStyle(
+      color: alertButton.type == AlertButtonType.confirm
+          ? Colors.white
+          : Colors.grey,
       fontWeight: FontWeight.w600,
       fontSize: 18.0,
     );
-
-    if (isOkayBtn) {
-      return options.confirmBtnTextStyle ?? textStyle;
-    } else {
-      return options.cancelBtnTextStyle ?? textStyle;
-    }
   }
 }
